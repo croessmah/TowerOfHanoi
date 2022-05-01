@@ -17,6 +17,7 @@ Window {
     readonly property int maxRings: 20
     readonly property int minRings: 4
     property bool running: false
+    property bool forward: true
     readonly property bool finished: !(hanoi.hasNext && hanoi.hasPrev)
 
     minimumWidth: footer.x + footer.width
@@ -174,12 +175,14 @@ Window {
 
         Row
         {
+            id: controlsRow
             spacing: 4
             height: parent.height - 8
             anchors.centerIn: parent
 
             RoundButton
             {
+                anchors.verticalCenter: parent.verticalCenter
                 text: "<<"
                 radius: parent.height
                 enabled: hanoi.hasPrev
@@ -206,26 +209,60 @@ Window {
                 }
             }
 
-            Button
+            Item
             {
-                text: running ? "pause" : "start"
-                width: 48
+                width: 64
                 height: parent.height
-                onClicked: {
-                    if (running) {
+                Button
+                {
+                    id: pauseButton
+                    text: "pause"
+                    width: parent.width
+                    height: parent.height
+                    visible: running
+                    onClicked: {
                         moveAnimation.stopMove();
                         running = false
                     }
-                    else {
-                        running = true
-                        if (finished)
-                            hanoi.refresh(ringsCount.value)
-                        hanoi.moveNext()
+                }
+
+                Column
+                {
+                    width: parent.width
+                    anchors.verticalCenter: parent.verticalCenter
+                    spacing: 2
+                    visible: !running
+                    Button
+                    {
+                        text: "start -->"
+                        width: parent.width
+                        height: controlsRow.height / 2 - 4
+                        onClicked: {
+                            running = true
+                            forward = true
+                            if (finished)
+                                hanoi.refresh(ringsCount.value)
+                            hanoi.moveNext()
+                        }
+                    }
+                    Button
+                    {
+                        text: "start <--"
+                        width: parent.width
+                        height: controlsRow.height / 2 - 4
+                        enabled: hanoi.hasPrev
+                        onClicked: {
+                            running = true
+                            forward = false
+                            hanoi.movePrev()
+                        }
                     }
                 }
             }
+
             RoundButton
             {
+                anchors.verticalCenter: parent.verticalCenter
                 text: ">>"
                 radius: parent.height
                 enabled: hanoi.hasNext
@@ -239,6 +276,7 @@ Window {
             Dial
             {
                 id: animatioSpeed
+                anchors.verticalCenter: parent.verticalCenter
                 width: parent.height
                 height: parent.height
                 from: 4
@@ -249,8 +287,9 @@ Window {
 
             Slider
             {
+                anchors.verticalCenter: parent.verticalCenter
                 width: 120
-                height: parent.height
+                height: parent.height / 2
                 from: 0
                 to: hanoi.stepsCount > 0 ? hanoi.stepsCount : 0
                 stepSize: 1
@@ -267,8 +306,9 @@ Window {
 
             ProgressBar
             {
+                anchors.verticalCenter: parent.verticalCenter
                 width: 120
-                height: parent.height
+                height: parent.height / 2
                 from: 0
                 to: 1
                 value: hanoi.stepsCount > 0 ? hanoi.currentStep / hanoi.stepsCount : 0
@@ -349,7 +389,12 @@ Window {
         onFinished:
         {
             if (root.running)
-                hanoi.moveNext()
+            {
+                if (forward)
+                    hanoi.moveNext()
+                else
+                    hanoi.movePrev()
+            }
         }
     }
 
