@@ -1,6 +1,8 @@
 #include "HanoiTowerModel.h"
 #include "Hanoi.h"
 
+#include <algorithm>
+
 namespace
 {
 
@@ -39,19 +41,19 @@ void HanoiTowerModel::refresh(unsigned ringsCount)
     emit refreshed();
 }
 
-void HanoiTowerModel::moveToStep(QVariant stepVariant)
+void HanoiTowerModel::moveToStep(int step)
 {
-    uint64_t step = stepVariant.toULongLong();//check ok?
-    if (step > stepsCount())
+    if (step > stepsCount())//TODO: std::clamp
         step = stepsCount();
+    else if (step < 0)
+        step = 0;
 
     const uint64_t cur = currentStep();
     if (step == cur)
         return;
 
     const uint64_t forward = step > cur;
-    while(step != hanoi_->currentStep())
-    {
+    while(step != hanoi_->currentStep()) {
         if (forward)
             hanoi_->next();
         else

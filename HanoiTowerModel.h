@@ -21,7 +21,7 @@ public:
     ~HanoiTowerModel();
 
     Q_INVOKABLE void refresh(unsigned ringsCount);
-    Q_INVOKABLE void moveToStep(QVariant step);//uint64_t
+    Q_INVOKABLE void moveToStep(int step);
     Q_INVOKABLE void moveNext();
     Q_INVOKABLE void movePrev();
     Q_INVOKABLE QJsonArray from() const;

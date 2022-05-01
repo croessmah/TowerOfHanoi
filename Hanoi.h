@@ -33,8 +33,10 @@ public:
     {
         if (isEnd())
             return {eTo, eTo};
+
         const step_t currentMove = steps_[currentStep_ % 3];
         ++currentStep_;
+
         return step(currentMove);
     }
 
@@ -45,20 +47,52 @@ public:
 
         --currentStep_;
         const step_t currentMove = steps_[currentStep_ % 3];
+
         return step(currentMove);
     }
 
-    unsigned ringsCount() const { return static_cast<unsigned>(from().size() + to().size() + buffer().size()); }
-    uint64_t steps() const { return (uint64_t(1) << ringsCount()) - 1; }
-    uint64_t currentStep() const { return currentStep_; }
-    bool isBegin() const { return buffer().empty() && to().empty(); }
-    bool isEnd() const { return buffer().empty() && from().empty(); }
+    unsigned ringsCount() const
+    {
+        return static_cast<unsigned>(from().size() + to().size() + buffer().size());
+    }
 
-    const rings_container_t& from() const { return kernels_[eFrom]; }
-    const rings_container_t& to() const { return kernels_[eTo]; }
-    const rings_container_t& buffer() const { return kernels_[eBuffer]; }
+    uint64_t steps() const
+    {
+        return (uint64_t(1) << ringsCount()) - 1;
+    }
+
+    uint64_t currentStep() const
+    {
+        return currentStep_;
+    }
+
+    bool isBegin() const
+    {
+        return buffer().empty() && to().empty();
+    }
+
+    bool isEnd() const
+    {
+        return buffer().empty() && from().empty();
+    }
+
+    const rings_container_t& from() const
+    {
+        return kernels_[eFrom];
+    }
+
+    const rings_container_t& to() const
+    {
+        return kernels_[eTo];
+    }
+
+    const rings_container_t& buffer() const
+    {
+        return kernels_[eBuffer];
+    }
 
     constexpr static unsigned maxRings() { return csMaxRings; }
+
 private:
     enum
     {
@@ -83,7 +117,8 @@ private:
     std::array<rings_container_t, 3> kernels_;
     const std::array<step_t, 3>& steps_;
     unsigned currentStep_;
-    constexpr static unsigned csMaxRings = 64;
+
+    constexpr static unsigned csMaxRings = 63;
     constexpr static std::array<step_t, 3> csEvenMoves_ {{ {eFrom, eBuffer}, {eFrom, eTo}, {eBuffer, eTo} }};
     constexpr static std::array<step_t, 3> csOddMoves_  {{ {eFrom, eTo}, {eFrom, eBuffer}, {eBuffer, eTo} }};
 };
