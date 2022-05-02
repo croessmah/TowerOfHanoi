@@ -11,7 +11,7 @@ Window {
     visible: true
     title: qsTr("Tower of Hanoi")
 
-    readonly property int ringWidth: 200
+    readonly property int ringWidth: 240
     readonly property int ringHeight: 20
     readonly property int ringDiffPx: 6
     readonly property int maxRings: 31 //NOTE: maxRings <= 31
@@ -171,7 +171,7 @@ Window {
             top:parentContainer.bottom
             bottomMargin: 12
         }
-        height: 54
+        height: 64
 
         Row
         {
@@ -236,7 +236,7 @@ Window {
                     {
                         text: "start -->"
                         width: parent.width
-                        height: controlsRow.height / 2 - 4
+                        height: controlsRow.height / 2 - 1
                         onClicked: {
                             running = true
                             forward = true
@@ -249,7 +249,7 @@ Window {
                     {
                         text: "start <--"
                         width: parent.width
-                        height: controlsRow.height / 2 - 4
+                        height: controlsRow.height / 2 - 1
                         enabled: hanoi.hasPrev
                         onClicked: {
                             running = true
@@ -288,7 +288,7 @@ Window {
             Slider
             {
                 anchors.verticalCenter: parent.verticalCenter
-                width: 120
+                width: 180
                 height: parent.height / 2
                 from: 0
                 to: hanoi.stepsCount > 0 ? hanoi.stepsCount : 0
