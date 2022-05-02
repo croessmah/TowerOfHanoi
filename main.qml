@@ -14,7 +14,7 @@ Window {
     readonly property int ringWidth: 200
     readonly property int ringHeight: 20
     readonly property int ringDiffPx: 6
-    readonly property int maxRings: 20
+    readonly property int maxRings: 31 //NOTE: maxRings <= 31
     readonly property int minRings: 4
     property bool running: false
     property bool forward: true
@@ -76,7 +76,7 @@ Window {
         id: parentContainer
 
         width: ringsContainer.width
-        height: 20 * 22
+        height: ringHeight * (maxRings + 2)
 
         Rectangle
         {
@@ -313,7 +313,6 @@ Window {
                 to: 1
                 value: hanoi.stepsCount > 0 ? hanoi.currentStep / hanoi.stepsCount : 0
             }
-
         }
     }
 

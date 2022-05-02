@@ -52,13 +52,7 @@ void HanoiTowerModel::moveToStep(int step)
     if (step == cur)
         return;
 
-    const uint64_t forward = step > cur;
-    while(step != hanoi_->currentStep()) {
-        if (forward)
-            hanoi_->next();
-        else
-            hanoi_->prev();
-    }
+    hanoi_->toStep(step);
 
     emit refreshed();
 }
